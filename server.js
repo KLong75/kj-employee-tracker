@@ -2,6 +2,7 @@ const inquirer = require('inquirer');
 const express = require('express');
 const cTable = require('console.table');
 const fetch = require('node-fetch')
+const sequelize = require('./db/connection');
 
 const db = require('./db/connection');
 const apiRoutes = require('./routes/apiRoutes');
@@ -70,6 +71,7 @@ const selectOption = () => {
 
 async function viewAllDepartments() {
   console.log('yo');
+
   
 };
 

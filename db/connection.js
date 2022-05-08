@@ -1,3 +1,4 @@
+/*
 const mysql = require('mysql2');
 
 // Connect to database
@@ -11,12 +12,12 @@ const db = mysql.createConnection({
 });
 
 module.exports = db;
+*/
 
 
 
 
 
-/*
 const Sequelize = require('sequelize');
 
 
@@ -35,4 +36,3 @@ if(process.env.JAWSDB_URL) {
 }
 
 module.exports = sequelize;
-*/
