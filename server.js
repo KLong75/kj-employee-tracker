@@ -68,19 +68,9 @@ const selectOption = () => {
       })
 };
 
-const viewAllDepartments = () => {
-  let queryUrl = '/api/department';
-  fetch(queryUrl)
-  .then(response => {
-    if (!response.ok) {
-      return alert('Error: ' + response.statusText);
-    }
-    return response.json();
-  })
-  .then(response => {
-    console.table(response);
-  });
-
+async function viewAllDepartments() {
+  console.log('yo');
+  
 };
 
 
