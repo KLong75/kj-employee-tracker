@@ -13,7 +13,7 @@ VALUES
 
 INSERT INTO role (id, title, salary, department_id)
 VALUES
-(1, 'intern', 0, 1)
+(1, 'intern', 0, 1),
 (2, 'engineer', 50000, 1), 
 (3, 'jedi', 80000, 2), 
 (4, 'ninja', 70000, 2), 
