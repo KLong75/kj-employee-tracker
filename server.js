@@ -7,8 +7,6 @@ const db = require("./db/connection");
 
 db.connect((err) => {
   if (err) throw err;
-  console.log("Database connected.");
-  
 });
 
 
@@ -26,7 +24,8 @@ const selectOption = () => {
         "Add a department",
         "Add a role",
         "Add an employee",
-        "Update a role",
+        "Update a role"
+
       ],
     })
     .then((answer) => {
