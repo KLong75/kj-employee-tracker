@@ -9,6 +9,9 @@ Employee Tracker is a Content Management System run from the command line design
 ![employee_tracker_1](https://user-images.githubusercontent.com/98487770/167485518-1f1db830-7406-4ee7-937f-135104522fb9.png)
 ![employee_tracker_2](https://user-images.githubusercontent.com/98487770/167485547-abef949a-baef-4ff0-a0bc-a5ee138df0fa.png)
 
+## Walkthrough Video
+
+
 ## Table of Contents
 - [Installation](#installation)
 - [Usage](#usage)
