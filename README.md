@@ -3,7 +3,7 @@
 ![license badge!](https://img.shields.io/badge/license-MIT-blue)
 
 ## Description
-Employee Tracker is a Content Management System run from the command line designed for a supervisor or business owner to easily keep track of employee information including employee role, department, and supervisor. Adding the capability to track additional data is possible. The app uses Node. JS, Inquirer, and MySQL.
+Employee Tracker is a Content Management System run from the command line designed for a supervisor or business owner to easily keep track of employee information including employee role, department, and supervisor. Adding the capability to track additional data is possible. The app uses Node. JS, Inquirer, , the console.table package and MySQL. 
 
 ## Screenshots
 ![employee_tracker_1](https://user-images.githubusercontent.com/98487770/167485518-1f1db830-7406-4ee7-937f-135104522fb9.png)

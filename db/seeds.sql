@@ -13,15 +13,16 @@ VALUES
 
 INSERT INTO role (id, title, salary, department_id)
 VALUES
-(1, 'intern', 0, 1),
-(2, 'engineer', 50000, 1), 
-(3, 'jedi', 80000, 2), 
-(4, 'ninja', 70000, 2), 
-(5, 'dishwasher', 30000, 3), 
-(6, 'cook', 40000, 3);
+(1, 'manager', 100000, 5),
+(2, 'salesperson', 50000, 2), 
+(3, 'engineer', 60000, 1), 
+(4, 'researcher', 70000, 3), 
+(5, 'coordinator', 80000, 4);
 
 INSERT INTO department 
 VALUES
 (1, 'engineering'), 
-(2, 'ninjas and jedis'), 
-(3, 'kitchen');
+(2, 'sales'),
+(3, 'research'), 
+(4, 'operations'),
+(5, 'management');
