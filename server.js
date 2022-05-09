@@ -1,237 +1,304 @@
-const inquirer = require('inquirer');
-const express = require('express');
-const cTable = require('console.table');
-const fetch = require('node-fetch')
-const sequelize = require('./db/connection');
+const inquirer = require("inquirer");
 
-const db = require('./db/connection');
-const apiRoutes = require('./routes/apiRoutes');
+const cTable = require("console.table");
 
-const Employee = require('./lib/employee');
-const Role = require('./lib/role');
-const Department = require('./lib/department');
-
-const PORT = process.env.PORT || 3001;
-const app = express();
-
-// Express middleware
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-
-// Use apiRoutes
-app.use('/api', apiRoutes);
-
-// Default response for any other request (Not Found)
-app.use((req, res) => {
-    res.status(404).end();
-});
+const db = require("./db/connection");
 
 
-// Start server after DB connection
-db.connect(err => {
+db.connect((err) => {
   if (err) throw err;
-  console.log('Database connected.');
-  app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-  });
+  console.log("Database connected.");
+  
 });
+
 
 const selectOption = () => {
-  inquirer.prompt({   
-    type: 'list',
-    name: 'options',
-    message: 'What would you like to do?',
-    choices: [
-      'View all departments', 
-      'View all roles',
-      'View all employees',
-      'Add a department',
-      'Add a role',
-      'Add an employee',
-      'Update a role'
-    ]
-    }).then((answer) => {
-        if (answer.options === 'View all departments') {
-          viewAllDepartments()
-        } else if (answer.options === 'View all roles') {
-          viewAllRoles()
-        } else if (answer.options === 'View all employees') {
-            viewAllEmployees()
-        } else if (answer.options === 'Add a department') {
-            addDepartment()
-        } else if (answer.options === 'Add a role') {
-            addRole()
-        } else if (answer.options === 'Add an employee') {
-            addEmployee()        
-        } else if (answer.options === 'Update a role') {
-          updateRole()
-        } 
-      })
+  inquirer
+    .prompt({
+      type: "list",
+      name: "options",
+      message: "What would you like to do?",
+      choices: [
+
+        "View all departments",
+        "View all roles",
+        "View all employees",
+        "Add a department",
+        "Add a role",
+        "Add an employee",
+        "Update a role",
+      ],
+    })
+    .then((answer) => {
+      if (answer.options === "View all departments") {
+        viewAllDepartments();
+      } else if (answer.options === "View all roles") {
+        viewAllRoles();
+      } else if (answer.options === "View all employees") {
+        viewAllEmployees();
+      } else if (answer.options === "Add a department") {
+        addDepartment();
+      } else if (answer.options === "Add a role") {
+        addRole();
+      } else if (answer.options === "Add an employee") {
+        addEmployee();
+      } else if (answer.options === "Update a role") {
+        updateRole();
+      }
+    });
 };
 
-async function viewAllDepartments() {
-  console.log('yo');
+const viewAllDepartments = () => {
+  const sql = `SELECT * FROM department`;
 
-  
+  db.query(sql, (err, rows) => {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    console.table(rows);
+    selectOption();
+  });
 };
-
-
 
 const viewAllRoles = () => {
+  const sql = `SELECT * FROM role`;
 
+  db.query(sql, (err, rows) => {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    console.table(rows);
+    selectOption();
+  });
 };
 
 const viewAllEmployees = () => {
+  const sql = `SELECT * FROM employee`;
 
+  db.query(sql, (err, rows) => {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    console.table(rows);
+    selectOption();
+  });
 };
 
 const addDepartment = () => {
-  const createDepartment = () => {
-    inquirer.prompt([
-      {
-        type: 'input',
-        name: 'department_name',
-        message: 'Enter name of new department (Required)',
-        validate: departmentNameInput => {
-          if (departmentNameInput) {
-            return true;
-          } else {
-            console.log('Please enter name of new department');
-            return false;
+    inquirer
+      .prompt([
+        {
+          type: "input",
+          name: "department_name",
+          message: "Enter name of new department (Required)",
+          validate: (departmentNameInput) => {
+            if (departmentNameInput) {
+              return true;
+            } else {
+              console.log("Please enter name of new department");
+              return false;
+            }
+          },
+        },
+      ])
+      .then((answers) => {
+        
+        const sql = `INSERT INTO department (name) VALUE (?)`;
+        const params = [answers.department_name];
+
+        db.query(sql, params, (err, result) => {
+          if (err) {
+            console.log(err);
+            return;
           }
-        }
-      }
-      
-    ]).then ((answers) => {
-        const newDepartment = new Department(answers.department)
-        console.log(newDepartment);
-        //employeeArray.push(newIntern);
-        selectOption();
-    });
-  };
+          console.table(result);
+          console.log('new department has been addded');
+          selectOption();
+        });
+      });
 };
 
+
 const addRole = () => {
-  const createRole = () => {
-    inquirer.prompt([
-      {
-        type: 'input',
-        name: 'new_role',
-        message: 'Enter new role name (Required)',
-        validate: roleNameInput => {
-          if (roleNameInput) {
-            return true;
-          } else {
-            console.log('Please enter new role name');
-            return false;
+    inquirer
+      .prompt([
+        {
+          type: "input",
+          name: "new_role",
+          message: "Enter new role name (Required)",
+          validate: (roleNameInput) => {
+            if (roleNameInput) {
+              return true;
+            } else {
+              console.log("Please enter new role name");
+              return false;
+            }
+          },
+        },
+        {
+          type: "number",
+          name: "new_role_salary",
+          message: "Enter new role salary (Required)",
+          validate: (roleSalaryInput) => {
+            if (roleSalaryInput) {
+              return true;
+            } else {
+              console.log("Please enter new role salary");
+              return false;
+            }
+          },
+        },
+        {
+          type: "number",
+          name: "new_role_department",
+          message: "Enter new role department id (Required)",
+          validate: (roleDepartmentInput) => {
+            if (roleDepartmentInput) {
+              return true;
+            } else {
+              console.log("Please enter new role department id");
+              return false;
+            }
+          },
+        },
+      ])
+      .then((answers) => {
+        
+        const sql = `INSERT INTO role (title, salary, department_id) VALUE (?,?,?)`;
+        const params = [answers.new_role, answers.new_role_salary, answers.new_role_department];
+
+        db.query(sql, params, (err, result) => {
+          if (err) {
+            console.log(err);
+            return;
           }
-        }
-      },
-      {
-        type: 'input',
-        name: 'new_role_salary',
-        message: 'Enter new role salary (Required)',
-        validate: roleSalaryInput => {
-          if (roleSalaryInput) {
-            return true;
-          } else {
-            console.log('Please enter new role salary');
-            return false;
-          }
-        }
-      },
-      {
-        type: 'input',
-        name: 'new_role_department',
-        message: 'Enter new role department id (Required)',
-        validate: roleDepartmentInput => {
-          if (roleDepartmentInput) {
-            return true;
-          } else {
-            console.log('Please enter new role department id');
-            return false;
-          };
-        }
-      }
-      
-    ]).then ((answers) => {
-        const newRole = new Role(answers.new_role, answers.new_role_salary, answers.new_role_department);
-        console.log(newRole);
-        //employeeArray.push(newIntern);
-        selectOption();
-    });
-  };
+          console.table(result);
+          console.log('new role has been addded');
+          selectOption();
+        });
+      });
 };
 
 const addEmployee = () => {
-  const createEmployee = () => {
-    inquirer.prompt([
-      {
-        type: 'input',
-        name: 'new_employee_first_name',
-        message: 'Enter new employee first name (Required)',
-        validate: employeeFirstNameInput => {
-          if (employeeFirstNameInput) {
-            return true;
-          } else {
-            console.log('Please enter new employee first name');
-            return false;
+    inquirer
+      .prompt([
+        {
+          type: "input",
+          name: "new_employee_first_name",
+          message: "Enter new employee first name (Required)",
+          validate: (employeeFirstNameInput) => {
+            if (employeeFirstNameInput) {
+              return true;
+            } else {
+              console.log("Please enter new employee first name");
+              return false;
+            }
+          },
+        },
+        {
+          type: "input",
+          name: "new_employee_last_name",
+          message: "Enter new employee last name (Required)",
+          validate: (employeeLastNameInput) => {
+            if (employeeLastNameInput) {
+              return true;
+            } else {
+              console.log("Please enter new employee last name");
+              return false;
+            }
+          },
+        },
+        {
+          type: "input",
+          name: "new_employee_role",
+          message: "Enter role id of new employee (Required)",
+          validate: (employeeRoleInput) => {
+            if (isNaN(employeeRoleInput)) {
+              console.log("Please enter a number for the new employee role id");
+              return false;
+            } else {
+              return true;
+            }
           }
-        }
-      },
-      {
-        type: 'input',
-        name: 'new_employee_last_name',
-        message: 'Enter new employee last name (Required)',
-        validate: employeeLastNameInput => {
-          if (employeeLastNameInput) {
-            return true;
-          } else {
-            console.log('Please enter new employee last name');
-            return false;
+        },
+        {
+          type: "input",
+          name: "new_employee_manager",
+          message: "Enter new employee manager id (Required)",
+          validate: (employeeManagerInput) => {
+            if (isNaN(employeeManagerInput)) {
+              console.log("Please enter a number for the new employee manager id");
+              return false;
+            } else {
+              return true;
+            }
+          },
+        },
+      ])
+      .then((answers) => {
+        
+        const sql = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUE (?,?,?,?)`;
+        const params = [answers.new_employee_first_name, answers.new_employee_last_name, answers.new_employee_role, answers.new_employee_manager];
+
+        db.query(sql, params, (err, result) => {
+          if (err) {
+            console.log(err);
+            return;
           }
-        }
-      },
-      {
-        type: 'input',
-        name: 'new_employee_role',
-        message: 'Enter role of new employee (Required)',
-        validate: employeeRoleInput => {
-          if (employeeRoleInput) {
-            return true;
-          } else {
-            console.log('Please enter role of new employee');
-            return false;
-          };
-        }
-      },
-      {
-        type: 'input',
-        name: 'new_employee_manager',
-        message: 'Enter new employee manager id (Required)',
-        validate: employeeManagerInput => {
-          if (employeeManagerInput) {
-            return true;
-          } else {
-            console.log('Please enter new employee manager id');
-            return false;
-          };
-        }
-      },
-      
-    ]).then ((answers) => {
-        const newEmployee = new Employee(answers.new_employee_first_name, answers.new_employee_last_name, answers.new_employee_role_id, answers.new_employee_manager_id);
-        console.log(newEmployee);
-        //employeeArray.push(newIntern);
-        selectOption();
-    });
-  };
+          console.table(result);
+          console.log('new employee has been added')
+          selectOption();
+        });
+      });
 };
 
 const updateRole = () => {
+  inquirer
+      .prompt([
+        {
+          type: "input",
+          name: "select_employee_to_update",
+          message: "Enter id of employee you want to update (Required)",
+          validate: (employeeUpdateInput) => {
+            if (isNaN(employeeUpdateInput)) {
+              console.log("Please enter a number for the employee id");
+              return false;
+            } else {
+              return true;
+            }
+          },
+        },
+        {
+          type: "input",
+          name: "update_employee_role",
+          message: "Enter new role id (Required)",
+          validate: (newRoleInput) => {
+            if (isNaN(newRoleInput)) {
+            console.log("Please enter a number for the new role id");
+            return false;
+            } else {
+            return true;
+            }
+          },
+        },
+      ])
+      .then((answers) => {
+        
+        const sql = `UPDATE employee SET role_id = ? WHERE id = ?`;
+        const params = [answers.update_employee_role, answers.select_employee_to_update ];
 
+        db.query(sql, params, (err, result) => {
+          if (err) {
+            console.log(err);
+            return;
+          }
+          console.table(result);
+          selectOption();
+        });
+      });
 };
-
-
-
+      
 selectOption();
