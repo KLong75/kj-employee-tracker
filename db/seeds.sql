@@ -1,15 +1,15 @@
 INSERT INTO employee (id, first_name, last_name, role_id, manager_id) 
 VALUES
-(1, 'Concettina', 'Bartoli', 2, 1),
-(2, 'Rosabelle', 'Ingamells', 2, 2),
-(3, 'Rollin', 'Ramage', 4, 1),
-(4, 'Bibi', 'Stranger', 5, 2),
-(5, 'Thorndike', 'Willas', 2, 2),
-(6, 'Manolo', 'Keynes', 3, 1),
-(7, 'Dimitri', 'Sadlier', 3, 1),
-(8, 'Debra', 'Tombleson', 6, 3),
-(9, 'Nicoline', 'Rabat', 5, 1),
-(10, 'Shae', 'Medling', 5, 1);
+(1, 'Concettina', 'Bartoli', 2, 10),
+(2, 'Rosabelle', 'Ingamells', 2, 10),
+(3, 'Rollin', 'Ramage', 4, 10),
+(4, 'Bibi', 'Stranger', 5, 10),
+(5, 'Thorndike', 'Willas', 2, 10),
+(6, 'Manolo', 'Keynes', 3, 10),
+(7, 'Dimitri', 'Sadlier', 3, 10),
+(8, 'Debra', 'Tombleson', 4, 10),
+(9, 'Nicoline', 'Rabat', 5, 10),
+(10, 'Shae', 'Medling', 1, 10);
 
 INSERT INTO role (id, title, salary, department_id)
 VALUES

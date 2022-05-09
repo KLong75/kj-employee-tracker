@@ -43,7 +43,7 @@ const selectOption = () => {
 
 const viewAllDepartments = () => {
   
-  const sql = `SELECT department.*, role.title, role.salary, employee.first_name, employee.last_name FROM department LEFT JOIN role ON role.department_id = department.id LEFT JOIN employee ON employee.role_id = role.id`; 
+  const sql = `SELECT * FROM department`; 
 
   db.query(sql, (err, rows) => {
     if (err) {
@@ -56,7 +56,7 @@ const viewAllDepartments = () => {
 };
 
 const viewAllRoles = () => {
-  const sql = `SELECT role.*, employee.first_name, employee.last_name, department.name AS department_name FROM role LEFT JOIN employee ON employee.role_id = role.id LEFT JOIN department ON role.department_id = department.id`;
+  const sql = `SELECT role.*, department.name AS department_name FROM role LEFT JOIN employee ON employee.role_id = role.id LEFT JOIN department ON role.department_id = department.id`;
   db.query(sql, (err, rows) => {
     if (err) {
       console.log(err);
@@ -68,7 +68,7 @@ const viewAllRoles = () => {
 };
 
 const viewAllEmployees = () => {
-  const sql = `SELECT employee.*, role.title, role.salary, department.name FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN department ON role.department_id = department.id`;
+  const sql = `SELECT employee.*, role.title, role.salary, department.name AS department_name FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN department ON role.department_id = department.id`;
 
   db.query(sql, (err, rows) => {
     if (err) {
